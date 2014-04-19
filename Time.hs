@@ -24,5 +24,5 @@ diffTimes a b = tdSec $ diffClockTimes a b
 
 
 withinRange :: ClockTime -> ClockTime -> Int -> Int -> Bool
-withinRange a b c d = e > c && d <= e
+withinRange a b c d = d <= (abs e)
 	where e = diffTimes a b
