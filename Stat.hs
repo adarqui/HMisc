@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module HMisc.Stat (
 	statFiles,
 	statFile) where
@@ -6,7 +8,7 @@ import HMisc.StatInc
 import System.Posix.Files
 import Control.Monad
 import Data.Maybe
-
+import qualified Control.Exception as E
 
 createFilePair a b = FilePair { path = a, stat = b }
 
@@ -21,5 +23,5 @@ statFile s = liftM (Just . createFilePair s . fromJust) (statFileContainer s)
 
 statFileContainer :: FilePath -> IO (Maybe FileStatus)
 statFileContainer s =
-	catch (getFileStatus s >>= \x -> return (Just x))
-			(\e -> return Nothing)
+	E.catch (getFileStatus s >>= \x -> return (Just x))
+			(\(e :: E.SomeException) -> return Nothing)
